@@ -1,16 +1,34 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Track</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .no-results {
+            color: red;
+        }
+    </style>
     <script>
-        function searchTrack() {
+        function handleSubmit(event) {
+            event.preventDefault(); // Previene el envío del formulario para manejo manual
+
             // Obtener el valor del input
             const trackId = document.getElementById('trackId').value;
 
             // Construir la URL con el parámetro trackId
-            const url = `http://localhost:3000/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
+            const url = `http://161.35.182.37/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
 
             // Hacer la petición GET
             fetch(url)
@@ -19,6 +37,47 @@
                     // Manejar la respuesta
                     console.log('Respuesta del servidor:', data);
                     // Aquí puedes agregar código para procesar y mostrar los datos recibidos
+                    const resultsContainer = document.getElementById('results');
+                    const noResultsMessage = document.getElementById('noResults');
+
+                    // Limpiar resultados anteriores
+                    resultsContainer.innerHTML = '';
+                    noResultsMessage.style.display = 'none';
+
+                    if (data.length === 0) {
+                        noResultsMessage.style.display = 'block';
+                    } else {
+                        // Crear tabla
+                        const table = document.createElement('table');
+                        
+                        // Crear encabezado
+                        const thead = document.createElement('thead');
+                        const headerRow = document.createElement('tr');
+                        const headers = ['CODE', 'DATEIN', 'DATEINF', 'ID', 'NOTE', 'PIECES', 'REFERENCE', 'SOURCE', 'TYPE', 'USERID', 'WEIGHT'];
+                        headers.forEach(headerText => {
+                            const th = document.createElement('th');
+                            th.textContent = headerText;
+                            headerRow.appendChild(th);
+                        });
+                        thead.appendChild(headerRow);
+                        table.appendChild(thead);
+
+                        // Crear cuerpo de la tabla
+                        const tbody = document.createElement('tbody');
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            Object.values(item).forEach(value => {
+                                const td = document.createElement('td');
+                                td.textContent = value.trim();
+                                row.appendChild(td);
+                            });
+                            tbody.appendChild(row);
+                        });
+                        table.appendChild(tbody);
+
+                        // Agregar la tabla al contenedor de resultados
+                        resultsContainer.appendChild(table);
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -28,7 +87,19 @@
 </head>
 <body>
     <h1>Buscar Track</h1>
-    <input type="text" id="trackId" placeholder="Ingrese el track ID">
-    <button onclick="searchTrack()">Buscar</button>
+    <form onsubmit="handleSubmit(event)">
+        <input 
+            type="text" 
+            id="trackId" 
+            placeholder="Ingrese el track ID" 
+            pattern="\d+" 
+            title="El campo debe contener un la referencia válida" 
+            required
+        >
+        <button type="submit">Buscar</button>
+    </form>
+    <div id="results"></div>
+    <div id="noResults" class="no-results" style="display: none;">No hay resultados.</div>
+
 </body>
 </html>
