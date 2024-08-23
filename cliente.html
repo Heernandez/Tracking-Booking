@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Track</title>
+    <script>
+        function searchTrack() {
+            // Obtener el valor del input
+            const trackId = document.getElementById('trackId').value;
+
+            // Construir la URL con el parámetro trackId
+            const url = `http://localhost:3000/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
+
+            // Hacer la petición GET
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta
+                    console.log('Respuesta del servidor:', data);
+                    // Aquí puedes agregar código para procesar y mostrar los datos recibidos
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Buscar Track</h1>
+    <input type="text" id="trackId" placeholder="Ingrese el track ID">
+    <button onclick="searchTrack()">Buscar</button>
+</body>
+</html>
