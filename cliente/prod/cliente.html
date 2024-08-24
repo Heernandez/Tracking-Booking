@@ -4,6 +4,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Track</title>
     <style>
+        /* Estilos opcionales */
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -28,36 +46,6 @@
             // Opcionalmente, redirigir a la página de inicio de sesión o a otra página
             window.location.href = 'login.html'; // Cambia 'login.html' por la URL de tu página de inicio de sesión
         }
-        // Durante el login, después de obtener el token
-        function handleLogin() {
-            const credentials = {
-                username: 'tu_usuario',
-                password: 'tu_contraseña'
-            };
-
-            fetch('http://161.35.182.37/api/v1/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    // Guarda el token en localStorage o sessionStorage
-                    localStorage.setItem('jwtToken', data.token);
-                    // O si prefieres usar sessionStorage:
-                    // sessionStorage.setItem('jwtToken', data.token);
-                    console.log('Token guardado:', data.token);
-                } else {
-                    throw new Error('Error en la autenticación');
-                }
-            })
-            .catch(error => {
-                console.error('Error durante la autenticación:', error);
-            });
-        }
         function handleSubmit(event) {
             event.preventDefault(); // Previene el envío del formulario para manejo manual
 
@@ -65,24 +53,25 @@
             const trackId = document.getElementById('trackId').value;
 
             // Recuperar el token guardado
-            const token = localStorage.getItem('jwtToken');
+            //const token = localStorage.getItem('jwtToken');
+            const token = sessionStorage.getItem('jwtToken');
             if (!token) {
                 alert('No se encontró el token. Por favor, inicia sesión nuevamente.');
-                return;
+                window.location.href = 'login.html';
             }
         
             // Construir la URL con el parámetro trackId
             const url = `http://161.35.182.37/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
 
             // Hacer la petición GET
-            fetch(url,
-            headers: {
-                'Authorization': `Bearer ${token}` // Incluye el token JWT en el header
+            fetch( url,{
+                method: 'GET', // Asegúrate de especificar el método HTTP adecuado
+                headers: {
+                    'Authorization': `Bearer ${token}` // Incluye el token JWT en el header
+                }
             }
-            
-            )
-                .then(response => response.json())
-                .then(data => {
+            ).then(response => response.json())
+            .then(data => {
                     // Manejar la respuesta
                     console.log('Respuesta del servidor:', data);
                     // Aquí puedes agregar código para procesar y mostrar los datos recibidos
@@ -135,8 +124,8 @@
     </script>
 </head>
 <body>
-    <h1>Buscar Track</h1>
     <button class="button" onclick="logout()">Cerrar Sesión</button>
+    <h1>Buscar Track</h1>
     <form onsubmit="handleSubmit(event)">
         <input 
             type="text" 
