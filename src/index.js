@@ -5,14 +5,14 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./log/logger'); // Importar el logger
 const apiRoutes = require('./routes/apiRoutes'); // Importar las rutas API
-const cors = require('cors');
+//const cors = require('cors');
 
 // Configurar dotenv para cargar variables de entorno
 dotenv.config();
 
 const app = express();
 // Habilita CORS para todas las rutas
-app.use(cors());
+//app.use(cors());
 app.use(helmet());
 
 const port = process.env.PORT || 3000;
