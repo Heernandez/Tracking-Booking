@@ -52,10 +52,10 @@ router.post('/login', (req, res) => {
     // Aquí deberías verificar las credenciales del usuario (esto es solo un ejemplo simple)
    // if (username === 'tu_usuario' && password === 'tu_contraseña') {
         // Generar un token JWT
-        const token = generateAccessToken({ username });
+    const token = generateAccessToken({ username });
 
-        saveGenerateToken(token);
-        res.json({ token });
+    saveGenerateToken(token);
+    res.json({ token });
   //  } else {
      //   res.status(401).send('Credenciales inválidas');
    // }
