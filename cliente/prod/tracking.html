@@ -39,6 +39,10 @@
         }
     </style>
     <script>
+        function booking() {
+            window.location.href = 'booking.html'; // Cambia 'login.html' por la URL de tu página de inicio de sesión
+        }
+        
         function logout() {
             // Eliminar el token del sessionStorage
             sessionStorage.removeItem('jwtToken');
@@ -61,7 +65,7 @@
             }
         
             // Construir la URL con el parámetro trackId
-            const url = `http://localhost:3000/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
+            const url = `http://161.35.182.37/api/v1/search?trackId=${encodeURIComponent(trackId)}`;
 
             // Hacer la petición GET
             fetch( url,{
@@ -125,6 +129,7 @@
 </head>
 <body>
     <button class="button" onclick="logout()">Cerrar Sesión</button>
+    <button class="button" onclick="booking()">Booking</button>
     <h1>Buscar Track</h1>
     <form onsubmit="handleSubmit(event)">
         <input 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Form</title>
+</head>
+<body>
+    <button onclick="redirectToClient()">Go to Client Page</button>
+    <h2>Booking Form</h2>
+    <form id="bookingForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <button type="button" onclick="submitBooking()">Submit</button>
+    </form>
+
+    <script>
+        function redirectToClient() {
+            window.location.href = 'tracking.html'; // Redirige a cliente.html
+        }
+        async function submitBooking() {
+            // Obtener los valores de los campos del formulario
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const date = document.getElementById('date').value;
+
+            // Obtener el token del sessionStorage
+            const token = sessionStorage.getItem('jwtToken');
+
+            if (!token) {
+                alert('Token not found. Please log in.');
+                window.location.href = 'login.html'; 
+                return;
+            }
+
+            // Crear el objeto de datos para enviar
+            const bookingData = {
+                name: name,
+                email: email,
+                phone: phone,
+                date: date
+            };
+
+            // Hacer la petición POST a la API
+            try {
+                const response = await fetch('http://161.35.182.37/api/v1/booking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Booking successful: ' + data.message);
+                } else {
+                    alert('Error: ' + response.statusText);
+                }
+            } catch (error) {
+                console.error('Error during booking:', error);
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
