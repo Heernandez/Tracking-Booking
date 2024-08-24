@@ -3,8 +3,11 @@ const router = express.Router();
 const axios = require('axios');
 const logger = require('../log/logger'); // Importar el logger
 const { parseSoapResponse } = require('../tracking/track');
+
+const {authenticateToken,generateAccessToken,saveGenerateToken } = require('../auth/auth'); // Importar el middleware
+
 // Endpoint de ejemplo para manejar una solicitud
-router.get('/search', async (req, res) => {
+router.get('/search', authenticateToken,async (req, res) => {
     console.log("ejecuta")
     const { trackId } = req.query;
     // Validar que trackId es numérico
@@ -41,24 +44,21 @@ router.get('/search', async (req, res) => {
     }
 });
 
-router.get('/another-route', (req, res) => {
-    res.send('Otra ruta');
-});
+// Ruta para autenticar al usuario y proporcionar un token JWT
+router.post('/login', (req, res) => {
+    const { username, password } = req.body;
 
-router.post('/fetch-data', async (req, res) => {
-    const requestData = req.body.data;
-    try {
-        // Hacer una solicitud a otra API usando axios
-        const response = await axios.post(process.env.EXTERNAL_API_URL, { data: requestData }, {
-            headers: { 'Authorization': `Bearer ${process.env.API_KEY}` }
-        });
+    console.log("lucho :",username,password);
+    // Aquí deberías verificar las credenciales del usuario (esto es solo un ejemplo simple)
+   // if (username === 'tu_usuario' && password === 'tu_contraseña') {
+        // Generar un token JWT
+        const token = generateAccessToken({ username });
 
-        // Enviar la respuesta de la API externa al cliente
-        res.json(response.data);
-    } catch (error) {
-        console.error('Error en la solicitud a la API externa:', error);
-        res.status(500).json({ error: 'Error al procesar la solicitud' });
-    }
+        saveGenerateToken(token);
+        res.json({ token });
+  //  } else {
+     //   res.status(401).send('Credenciales inválidas');
+   // }
 });
 
 module.exports = router;
