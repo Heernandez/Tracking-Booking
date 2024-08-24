@@ -58,36 +58,6 @@
                 console.error('Error durante la autenticación:', error);
             });
         }
-
-        function authenticateUser() {
-            const credentials = {
-                username: 'tu_usuario',  // Aquí pones el nombre de usuario
-                password: 'tu_contraseña' // Aquí pones la contraseña
-            };
-            // Suponiendo que tu servidor tiene una ruta /login para autenticar y generar el JWT
-            return fetch('http://161.35.182.37/api/v1/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    return data.token;  // Devuelve el token si se recibió correctamente
-                } else {
-                    throw new Error('Error en la autenticación');
-                }
-            })
-            .catch(error => {
-                console.error('Error durante la autenticación:', error);
-                return null;  // Devuelve null si hubo un error
-            });
-            }
-        }
-
-        
         function handleSubmit(event) {
             event.preventDefault(); // Previene el envío del formulario para manejo manual
 
