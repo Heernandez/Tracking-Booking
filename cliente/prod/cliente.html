@@ -21,6 +21,13 @@
         }
     </style>
     <script>
+        function logout() {
+            // Eliminar el token del sessionStorage
+            sessionStorage.removeItem('jwtToken');
+            localStorage.removeItem('jwtToken');
+            // Opcionalmente, redirigir a la página de inicio de sesión o a otra página
+            window.location.href = 'login.html'; // Cambia 'login.html' por la URL de tu página de inicio de sesión
+        }
         // Durante el login, después de obtener el token
         function handleLogin() {
             const credentials = {
@@ -159,6 +166,7 @@
 </head>
 <body>
     <h1>Buscar Track</h1>
+    <button class="button" onclick="logout()">Cerrar Sesión</button>
     <form onsubmit="handleSubmit(event)">
         <input 
             type="text" 
