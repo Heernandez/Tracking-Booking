@@ -40,5 +40,7 @@ const bookingSchema = Joi.object({
     totalPieces: Joi.number().min(0).required(),
     totalWeight: Joi.number().min(0).required(),
     totalVolume: Joi.number().min(0).required(),
+    // Campo adicional
+    sendEmail: Joi.boolean().truthy('on').falsy(null).default(false)
 });
 module.exports = { bookingSchema };

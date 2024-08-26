@@ -277,6 +277,7 @@ async function sendEmail(to="luishernandez@utp.edu.co", fileBuffer, filename) {
 router.post('/booking', async (req, res) => {
     try {
         // Validar los datos recibidos
+        //console.log("data :",req.body);
         const { error, value } = bookingSchema.validate(req.body);
         if (error) {
             console.log(error,"\n",error.details[0].message );
@@ -295,39 +296,16 @@ router.post('/booking', async (req, res) => {
             fileBuffer = await generateExcel(value);
             filename = 'booking.xlsx';
         }
-        // Ejecuta primero el SOAP
-        try {
-            // Envía la solicitud SOAP
-            const soapApiUrl = process.env.EXTERNAL_API_URL; // Asegúrate de tener esto en tu .env
-            const soapRequest = `
-                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
-                    <soapenv:Header/>
-                    <soapenv:Body>
-                        <tem:getTracking>
-                            <tem:pAwbno>${trackId}</tem:pAwbno>
-                        </tem:getTracking>
-                    </soapenv:Body>
-                </soapenv:Envelope>
-            `;
-    
-            // Hacer la solicitud SOAP
-            const response = await axios.post(soapApiUrl, soapRequest, {
-                headers: {
-                    'Content-Type': 'text/xml; charset=utf-8'
-                }
-            });
-    
-            const parsedData = await parseSoapResponse(response.data);
-            res.json(parsedData);
-        } catch (error) {
-            console.error('Error en la solicitud SOAP:', error);
-            res.status(500).json({ error: 'Error en la solicitud SOAP' });
-        }
         // Enviar el archivo por correo
         console.log("filename: ",filename,"\nfilebuffer:",fileBuffer);
-        await sendEmail(value.email, fileBuffer, filename);
 
-        res.status(200).json({ message: 'Booking received and file sent via email.' });
+        if(value.sendEmail){
+            await sendEmail(value.email, fileBuffer, filename);
+            res.status(200).json({ message: 'Booking received and file sent via email.' });
+        }else{
+            console.log("no se envía correo");
+            res.status(200).json({ message: 'Booking received but file wasnt send via email.' });
+        }
     } catch (err) {
         console.error('Error processing booking:', err);
         res.status(500).json({ error: 'Internal server error' });
