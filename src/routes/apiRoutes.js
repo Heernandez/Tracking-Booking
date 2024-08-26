@@ -150,167 +150,6 @@ async function generateExcel(data) {
     const buffer = await workbook.xlsx.writeBuffer();
     return buffer;
 }
-// Función para generar el archivo PDF
-async function generatePDF2(data) {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument();
-        const buffers = [];
-        const writableStream = new stream.Writable({
-            write(chunk, encoding, callback) {
-                buffers.push(chunk);
-                callback();
-            }
-        });
-
-        doc.pipe(writableStream);
-
-        // Agregar información general
-        doc.fontSize(12).text('Booking Details', { align: 'center' });
-        doc.fontSize(10).text(`Airway Bill: ${data.airwaybill}`);
-        doc.text(`Origin: ${data.origin}`);
-        doc.text(`Destination: ${data.destination}`);
-        doc.text(`Date: ${data.date}`);
-        doc.text(`Flight: ${data.flight}`);
-        doc.text(`Rate Class: ${data.rateClass}`);
-        doc.text(`Priority: ${data.priority}`);
-        doc.text(`Shipper: ${data.shipper}`);
-        doc.text(`Consignee: ${data.consignee}`);
-        doc.text(`Agent: ${data.agent}`);
-        
-        doc.moveDown();
-
-        // Agregar tabla de cargo
-        doc.fontSize(12).text('Cargo Details', { underline: true });
-        doc.moveDown();
-
-        if (data.cargo && data.cargo.length > 0) {
-            // Agregar encabezados de la tabla
-            doc.fontSize(10)
-                .text('Pieces   Packing   Weight   Length   Width   Height   Volume   Reference   Note');
-
-            data.cargo.forEach(item => {
-                doc.text(`${item.pieces}   ${item.packing}   ${item.weight}   ${item.length}   ${item.width}   ${item.height}   ${item.volume}   ${item.reference}   ${item.note}`);
-            });
-        }
-
-        doc.moveDown();
-        
-        // Agregar totales
-        doc.fontSize(12).text('Totals', { underline: true });
-        doc.fontSize(10)
-            .text(`Total Pieces: ${data.totalPieces}`);
-        doc.text(`Total Weight: ${data.totalWeight}`);
-        doc.text(`Total Volume: ${data.totalVolume}`);
-
-        doc.end();
-
-        writableStream.on('finish', () => {
-            const pdfBuffer = Buffer.concat(buffers);
-            resolve(pdfBuffer);
-        });
-
-        writableStream.on('error', (error) => {
-            reject(error);
-        });
-    });
-}
-
-async function generatePDF3(data) {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument();
-        const buffers = [];
-        const writableStream = new stream.Writable({
-            write(chunk, encoding, callback) {
-                buffers.push(chunk);
-                callback();
-            }
-        });
-
-        doc.pipe(writableStream);
-
-        // Agregar información general
-        doc.fontSize(12).text('Booking Details', { align: 'center' });
-        doc.fontSize(10).text(`Airway Bill: ${data.airwaybill}`);
-        doc.text(`Origin: ${data.origin}`);
-        doc.text(`Destination: ${data.destination}`);
-        doc.text(`Date: ${data.date}`);
-        doc.text(`Flight: ${data.flight}`);
-        doc.text(`Rate Class: ${data.rateClass}`);
-        doc.text(`Priority: ${data.priority}`);
-        doc.text(`Shipper: ${data.shipper}`);
-        doc.text(`Consignee: ${data.consignee}`);
-        doc.text(`Agent: ${data.agent}`);
-        
-        doc.moveDown();
-
-        // Agregar tabla de cargo
-        doc.fontSize(12).text('Cargo Details', { underline: true });
-        doc.moveDown();
-
-        if (data.cargo && data.cargo.length > 0) {
-            // Definir la posición y tamaño de las celdas
-            const x = 50;
-            const y = doc.y;
-            const cellHeight = 20;
-            const columnWidths = [50, 50, 50, 50, 50, 50, 50, 50, 50];
-            const headers = ['Pieces', 'Packing', 'Weight', 'Length', 'Width', 'Height', 'Volume', 'Reference', 'Note'];
-            const totalColumns = headers.length;
-
-            // Dibujar encabezados de la tabla
-            doc.fontSize(10);
-            headers.forEach((header, index) => {
-                doc.text(header, x + index * columnWidths[index], y, { width: columnWidths[index], align: 'center' });
-            });
-            doc.moveDown();
-
-            // Dibujar líneas de encabezado
-            doc.moveTo(x, y + cellHeight)
-                .lineTo(x + columnWidths.reduce((a, b) => a + b, 0), y + cellHeight)
-                .stroke();
-
-            // Dibujar líneas de separación entre filas
-            data.cargo.forEach((item, rowIndex) => {
-                console.log("index : ");
-                let rowY = y + cellHeight * (2 + rowIndex);
-                headers.forEach((header, colIndex) => {
-                    doc.text(item[header.toLowerCase()], x + colIndex * columnWidths[colIndex], rowY, { width: columnWidths[colIndex], align: 'center' });
-                });
-
-                // Línea inferior de la fila
-                doc.moveTo(x, rowY + cellHeight)
-                    .lineTo(x + columnWidths.reduce((a, b) => a + b, 0), rowY + cellHeight)
-                    .stroke();
-                console.log("index : ",rowIndex,"\n","x : ",x,"\n","rowY : ",rowY,"\n","cellHeight : ",cellHeight);
-            });
-
-            // Línea final de la tabla
-            doc.moveTo(x, y + cellHeight * (2 + data.cargo.length))
-                .lineTo(x + columnWidths.reduce((a, b) => a + b, 0), y + cellHeight * (2 + data.cargo.length))
-                .stroke();
-        }
-
-        doc.moveDown();
-        
-        // Agregar totales
-        doc.fontSize(12).text('Totals', { underline: true });
-        doc.fontSize(10)
-            .text(`Total Pieces: ${data.totalPieces}`);
-        doc.text(`Total Weight: ${data.totalWeight}`);
-        doc.text(`Total Volume: ${data.totalVolume}`);
-
-        doc.end();
-
-        writableStream.on('finish', () => {
-            const pdfBuffer = Buffer.concat(buffers);
-            resolve(pdfBuffer);
-        });
-
-        writableStream.on('error', (error) => {
-            reject(error);
-        });
-    });
-}
-
 async function generatePDF(data) {
     return new Promise((resolve, reject) => {
         const doc = new PDFDocument();
@@ -408,7 +247,6 @@ async function generatePDF(data) {
         });
     });
 }
-
 // Función para enviar el archivo por correo electrónico
 async function sendEmail(to="luishernandez@utp.edu.co", fileBuffer, filename) {
     console.log("try send");
@@ -458,7 +296,34 @@ router.post('/booking', async (req, res) => {
             fileBuffer = await generateExcel(value);
             filename = 'booking.xlsx';
         }
-
+        // Ejecuta primero el SOAP
+        try {
+            // Envía la solicitud SOAP
+            const soapApiUrl = process.env.EXTERNAL_API_URL; // Asegúrate de tener esto en tu .env
+            const soapRequest = `
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+                    <soapenv:Header/>
+                    <soapenv:Body>
+                        <tem:getTracking>
+                            <tem:pAwbno>${trackId}</tem:pAwbno>
+                        </tem:getTracking>
+                    </soapenv:Body>
+                </soapenv:Envelope>
+            `;
+    
+            // Hacer la solicitud SOAP
+            const response = await axios.post(soapApiUrl, soapRequest, {
+                headers: {
+                    'Content-Type': 'text/xml; charset=utf-8'
+                }
+            });
+    
+            const parsedData = await parseSoapResponse(response.data);
+            res.json(parsedData);
+        } catch (error) {
+            console.error('Error en la solicitud SOAP:', error);
+            res.status(500).json({ error: 'Error en la solicitud SOAP' });
+        }
         // Enviar el archivo por correo
         console.log("filename: ",filename,"\nfilebuffer:",fileBuffer);
         await sendEmail(value.email, fileBuffer, filename);
