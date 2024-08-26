@@ -72,7 +72,6 @@ router.post('/login', (req, res) => {
    // }
 });
 
-
 async function generateExcel(data) {
     console.log("datos para generar :", data);
     

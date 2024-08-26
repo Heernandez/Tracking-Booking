@@ -53,7 +53,8 @@
     <script>
         // Durante el login, después de obtener el token
         function handleLogin() {
-            
+            event.preventDefault();
+            console.log("ejecutando login");
              // Obtener los valores de los campos
              const username = document.getElementById('username').value;
              const password = document.getElementById('password').value;
@@ -66,7 +67,8 @@
                 username: username,
                 password: password
             };
-
+            console.log('ejeuctar peticion:');
+            
             fetch('http://localhost:3000/api/v1/login', {
                 method: 'POST',
                 headers: {
@@ -90,14 +92,15 @@
             .catch(error => {
                 console.error('Error durante la autenticación:', error);
             });
-        }
+        
+            }
 
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form id="loginForm" onsubmit="return handleLogin();)">
+        <form id="loginForm" onsubmit="handleLogin();">
             <div class="form-group">
                 <label for="username">Usuario:</label>
                 <input type="text" id="username" name="username" required>
