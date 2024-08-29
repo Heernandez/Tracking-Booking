@@ -15,7 +15,7 @@ const app = express();
 //app.use(cors());
 
 app.use(cors({
-    origin: 'https://heernandezdev.com',
+    origin: process.env.DOMAIN,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['*', 'Content-Type', 'Accept', 'Authorization'],
 }));
