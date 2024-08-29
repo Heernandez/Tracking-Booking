@@ -1,21 +1,10 @@
 const Joi = require('joi');
 
-// Esquema de validación usando Joi
-/*
-const bookingSchema = Joi.object({
-    name: Joi.string().min(3).required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().min(10).required(),
-    date: Joi.date().required(),
-    // Agrega más campos según tus necesidades
-});
-
-*/
 const bookingSchema = Joi.object({
     airwaybill: Joi.string().required(),
     origin: Joi.string().required(),
     destination: Joi.string().required(),
-    date: Joi.date().iso().required(), // Asegúrate de que el formato de la fecha sea ISO
+    date: Joi.date().iso().required(),
     flight: Joi.string().required(),
     rateClass: Joi.string().required(),
     priority: Joi.string().required(),
@@ -36,11 +25,11 @@ const bookingSchema = Joi.object({
         note: Joi.string().required(),
     })).required(),
 
-    // Validación de los totales (opcionales, pero útiles para evitar errores)
+    // Validación de los totales
     totalPieces: Joi.number().min(0).required(),
     totalWeight: Joi.number().min(0).required(),
     totalVolume: Joi.number().min(0).required(),
-    // Campo adicional
+    // Campo de confirmacion para enviar o no correo
     sendEmail: Joi.boolean().truthy('on').falsy(null).default(false)
 });
 module.exports = { bookingSchema };
