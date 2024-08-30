@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const { parseSoapResponse } = require('../tracking/track');
+const { parseSoapResponseTracking , parseSoapResponseGetDestination, parseSoapResponseGetRateClass} = require('../tracking/track');
 const { bookingSchema } = require('../validate/validate');
 const PDFDocument = require('pdfkit');
 const stream = require('stream');
@@ -34,7 +34,7 @@ router.get('/search',async (req, res) => {
                 'Content-Type': 'text/xml; charset=utf-8'
             }
         });
-        const parsedData = await parseSoapResponse(response.data);
+        const parsedData = await parseSoapResponseTracking(response.data);
         res.json(parsedData);
     } catch (error) {
         console.error('Error en la solicitud SOAP:', error);
@@ -210,7 +210,7 @@ async function generatePDF(data) {
 }
 // Función para enviar el archivo por correo electrónico
 async function sendEmail(to, fileBuffer, filename) {
-    console.log("try send");
+    console.log("try send to:",process.env.EMAIL_CONTACT_CENTER);
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -239,6 +239,7 @@ async function sendEmail(to, fileBuffer, filename) {
 router.post('/booking', async (req, res) => {
     try {
         // Se validan los datos recibidos
+        console.log("data:\n",req.body)
         const { error, value } = bookingSchema.validate(req.body);
         if (error) {
             console.log(error,"\n",error.details[0].message );
@@ -272,4 +273,59 @@ router.post('/booking', async (req, res) => {
     }
 });
 
+// Ruta para obtener lista de origen y destino
+
+router.get('/getDestination', async (req, res) => {
+    try {
+        
+        const soapApiUrl = process.env.EXTERNAL_API_URL; // URL de la api de consulta
+        const soapRequest = `
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <tem:getDestination/>
+                </soapenv:Body>
+            </soapenv:Envelope>
+        `;
+        const response = await axios.post(soapApiUrl, soapRequest, {
+            headers: {
+                'Content-Type': 'text/xml; charset=utf-8'
+            }
+        });
+        const parsedData = await parseSoapResponseGetDestination(response.data);
+        res.json(parsedData);
+    } catch (error) {
+        console.error('Error en la solicitud SOAP:', error);
+        res.status(500).json({ error: 'Your request could not be processed, please try again later.\nIf the error persists, contact Support.(GT01)' });
+    }
+
+});
+
+// Ruta para obtener lista de rate class
+
+router.get('/getRateClass', async (req, res) => {
+    try {
+        
+        const soapApiUrl = process.env.EXTERNAL_API_URL; // URL de la api de consulta
+        const soapRequest = `
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <tem:getCommodity/>
+                </soapenv:Body>
+            </soapenv:Envelope>
+        `;
+        const response = await axios.post(soapApiUrl, soapRequest, {
+            headers: {
+                'Content-Type': 'text/xml; charset=utf-8'
+            }
+        });
+        const parsedData = await parseSoapResponseGetRateClass(response.data);
+        res.json(parsedData);
+    } catch (error) {
+        console.error('Error en la solicitud SOAP:', error);
+        res.status(500).json({ error: 'Your request could not be processed, please try again later.\nIf the error persists, contact Support.(GT01)' });
+    }
+
+});
 module.exports = router;

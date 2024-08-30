@@ -38,11 +38,16 @@
         <input type="text" id="airwaybill" name="airwaybill" required><br><br>
 
         <label for="origin">Origin:</label>
-        <input type="text" id="origin" name="origin" required><br><br>
+        <select id="origin" name="origin" required>
+            <option value="">Seleccione un origen</option>
+            <!-- Las opciones serán cargadas dinámicamente -->
+        </select><br><br>
 
         <label for="destination">Destination:</label>
-        <input type="text" id="destination" name="destination" required><br><br>
-
+        <select id="destination" name="destination" required>
+            <option value="">Seleccione un destino</option>
+            <!-- Las opciones serán cargadas dinámicamente -->
+        </select><br><br>
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required><br><br>
 
@@ -50,11 +55,15 @@
         <input type="text" id="flight" name="flight" required><br><br>
 
         <label for="rateClass">Rate Class:</label>
-        <input type="text" id="rateClass" name="rateClass" required><br><br>
-
+        <select id="rateClass" name="rateClass" required>
+            <option value="">Seleccione una clase</option>
+            <!-- Las opciones serán cargadas dinámicamente -->
+        </select><br><br>
         <label for="priority">Priority:</label>
-        <input type="text" id="priority" name="priority" required><br><br>
-
+        <select id="priority" name="priority" required>
+            <option value="">Seleccione una prioridad</option>
+            <!-- Las opciones serán cargadas dinámicamente -->
+        </select><br><br>
         <label for="shipper">Shipper:</label>
         <input type="text" id="shipper" name="shipper" required><br><br>
 
@@ -84,11 +93,11 @@
                 <tr>
                     <td><input type="number" name="pieces[]" required></td>
                     <td><input type="text" name="packing[]" required></td>
-                    <td><input type="number" name="weight[]" step="0.01" required></td>
-                    <td><input type="number" name="length[]" step="0.01" required></td>
-                    <td><input type="number" name="width[]" step="0.01" required></td>
-                    <td><input type="number" name="height[]" step="0.01" required></td>
-                    <td><input type="number" name="volume[]" step="0.01" required></td>
+                    <td><input type="number" name="weight[]" inputmode="decimal" step="0.01" min="0" required></td>
+                    <td><input type="number" name="length[]" inputmode="decimal" step="0.01" min="0" required></td>
+                    <td><input type="number" name="width[]" inputmode="decimal" step="0.01" min="0" required></td>
+                    <td><input type="number" name="height[]" inputmode="decimal" step="0.01" min="0" required></td>
+                    <td><input type="number" name="volume[]" inputmode="decimal" step="0.01" min="0" required></td>
                     <td><input type="text" name="reference[]" required></td>
                     <td><input type="text" name="note[]" required></td>
                     <td>
