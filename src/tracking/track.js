@@ -1,14 +1,12 @@
-// src/xmlParser.js
 const { parseStringPromise } = require('xml2js');
 
 async function parseSoapResponse(xml) {
     try {
         const result = await parseStringPromise(xml, { explicitArray: false, ignoreAttrs: true });
         const tables = result['soap:Envelope']['soap:Body']['getTrackingResponse']['getTrackingResult']['diffgr:diffgram']['NewDataSet']['Table'];
-
         // Verifica si hay tablas y procesa la información
         if (Array.isArray(tables)) {
-            console.log("respuesta exitosa con info");
+            console.log("respuesta exitosa con informacion");
             return tables.map(table => ({
                 ID: table.ID,
                 SOURCE: table.SOURCE,
@@ -23,7 +21,7 @@ async function parseSoapResponse(xml) {
                 DATEINF: table.DATEINF,
             }));
         } else {
-            console.log("respuesta exitosa sin info");
+            console.log("respuesta exitosa sin informacion");
             return [];
         }
     } catch (error) {

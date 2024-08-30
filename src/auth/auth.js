@@ -7,19 +7,14 @@ const validTokens = {};
 
 // Función para generar un nuevo token
 function generateAccessToken(user) {
-    console.log("try generate");
     console.log('ACCESS_TOKEN_SECRET:', process.env.ACCESS_TOKEN_SECRET);
     const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-     // Almacenar el token generado en validTokens
-    console.log("generado : ",token);
+    // Se puede almacenar el tkn en BD indicando el TTL
     return token;
 }
 
 function saveGenerateToken(token){
-    console.log("try save");
     validTokens[token] = true;
-    console.log(validTokens);
-
 }
 // Middleware para autenticar el token
 function authenticateToken(req, res, next) {
@@ -34,23 +29,13 @@ function authenticateToken(req, res, next) {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
-
-        //req.user = user;
-
-        // Invalidate the current token
-        //delete validTokens[token];
-
-        // Generate a new token
-        //const newToken = generateAccessToken({ username: user.username });
-        //validTokens[newToken] = true;
-
-        // Attach the new token to the response headers
-        //res.setHeader('Authorization', `Bearer ${newToken}`);
-
+        // Si el token es valido, es decir se genero 
+        // con el access secret token se puede validar
+        // si no ha cadudado, de ser asi se puede cerrar la sesión
+        // o generar un nuevo token para operar
         next();
     });
 }
-
 module.exports = {
     authenticateToken,
     generateAccessToken,

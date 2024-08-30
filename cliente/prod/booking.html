@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Form</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+    <script src="scripts/booking.js" defer></script>
+</head>
+
+<body>
+    
+    <button onclick="redirectToClient()">Go to Client Page</button>
+    <h1>Booking Form</h1>
+
+    <form id="bookingForm" onsubmit="return handleSubmit(event)">
+        <h2>Flight Details</h2>
+        <label for="airwaybill">Airway Bill:</label>
+        <input type="text" id="airwaybill" name="airwaybill" required><br><br>
+
+        <label for="origin">Origin:</label>
+        <input type="text" id="origin" name="origin" required><br><br>
+
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" name="destination" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="flight">Flight:</label>
+        <input type="text" id="flight" name="flight" required><br><br>
+
+        <label for="rateClass">Rate Class:</label>
+        <input type="text" id="rateClass" name="rateClass" required><br><br>
+
+        <label for="priority">Priority:</label>
+        <input type="text" id="priority" name="priority" required><br><br>
+
+        <label for="shipper">Shipper:</label>
+        <input type="text" id="shipper" name="shipper" required><br><br>
+
+        <label for="consignee">Consignee:</label>
+        <input type="text" id="consignee" name="consignee" required><br><br>
+
+        <label for="agent">Agent:</label>
+        <input type="text" id="agent" name="agent" required><br><br>
+
+        <h2>Cargo Details</h2>
+        <table id="cargoTable">
+            <thead id="cargoTableHead">
+                <tr id="cargoTableRow">
+                    <th>Pieces</th>
+                    <th>Packing</th>
+                    <th>Weight</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Volume</th>
+                    <th>Reference</th>
+                    <th>Note</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="number" name="pieces[]" required></td>
+                    <td><input type="text" name="packing[]" required></td>
+                    <td><input type="number" name="weight[]" step="0.01" required></td>
+                    <td><input type="number" name="length[]" step="0.01" required></td>
+                    <td><input type="number" name="width[]" step="0.01" required></td>
+                    <td><input type="number" name="height[]" step="0.01" required></td>
+                    <td><input type="number" name="volume[]" step="0.01" required></td>
+                    <td><input type="text" name="reference[]" required></td>
+                    <td><input type="text" name="note[]" required></td>
+                    <td>
+                        <button type="button" onclick="removeRow(this)">Remove</button>
+                        <button type="button" onclick="deleteRow(this)">Delete Cargo</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" onclick="addRow()">Add Cargo</button>
+
+        <h3>Totals</h3>
+        <label for="totalPieces">Total Pieces:</label>
+        <input type="number" id="totalPieces" readonly><br><br>
+
+        <label for="totalWeight">Total Weight:</label>
+        <input type="number" id="totalWeight" step="0.01" readonly><br><br>
+
+        <label for="totalVolume">Total Volume:</label>
+        <input type="number" id="totalVolume" step="0.01" readonly><br><br>
+        <input type="checkbox" id="sendEmail" name="sendEmail"><br><br>
+        <button type="submit">Submit Booking</button>
+    </form>
+</body>
+
+</html>

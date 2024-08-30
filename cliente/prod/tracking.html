@@ -1,0 +1,63 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Track</title>
+    <style>
+        /* Estilos opcionales */
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .no-results {
+            color: red;
+        }
+    </style>
+    <script src="scripts/tracking.js" defer></script>
+</head>
+
+<body>
+    <button class="button" onclick="logout()">Cerrar Sesión</button>
+    <button class="button" onclick="booking()">Booking</button>
+    <h1>Buscar Track</h1>
+    <form onsubmit="handleSubmit(event)">
+        <input type="text" id="trackId" placeholder="Ingrese el track ID" pattern="\d+"
+            title="El campo debe contener un la referencia válida" required>
+        <button type="submit">Buscar</button>
+    </form>
+    <div id="results"></div>
+    <div id="noResults" class="no-results" style="display: none;">No hay resultados.</div>
+</body>
+
+</html>

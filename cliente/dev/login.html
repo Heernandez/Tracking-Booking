@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Login</title>
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -15,6 +15,7 @@
             margin: 0;
             background-color: #f4f4f4;
         }
+
         .container {
             background-color: #fff;
             padding: 20px;
@@ -22,82 +23,47 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
         }
+
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
         }
+
         .form-group input {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+
         .form-group input[type="submit"] {
             background-color: #007bff;
             color: #fff;
             border: none;
             cursor: pointer;
         }
+
         .form-group input[type="submit"]:hover {
             background-color: #0056b3;
         }
     </style>
-    <script>
-        // Durante el login, después de obtener el token
-        function handleLogin() {
-            
-             // Obtener los valores de los campos
-             const username = document.getElementById('username').value;
-             const password = document.getElementById('password').value;
- 
-             // Mostrar los valores en la consola
-             console.log('Usuario:', username);
-             console.log('Contraseña:', password);
-            
-            const credentials = {
-                username: username,
-                password: password
-            };
-
-            fetch('http://localhost:3000/api/v1/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    // Guarda el token en localStorage o sessionStorage
-                    //localStorage.setItem('jwtToken', data.token);
-                    // O si prefieres usar sessionStorage:
-                    sessionStorage.setItem('jwtToken', data.token);
-                    console.log('Token guardado:', data.token);
-                    window.location.href = 'cliente.html'; 
-                } else {
-                    throw new Error('Error en la autenticación');
-                }
-            })
-            .catch(error => {
-                console.error('Error durante la autenticación:', error);
-            });
-        }
-
-    </script>
+    <script src="scripts/login.js" defer></script>
 </head>
+
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form action="/login" >
+        <form id="loginForm" onsubmit="handleLogin();">
             <div class="form-group">
                 <label for="username">Usuario:</label>
                 <input type="text" id="username" name="username" required>
@@ -107,9 +73,10 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <input type="button" value="Iniciar Sesión" onclick="handleLogin()">
+                <input type="submit" value="Iniciar Sesión">
             </div>
         </form>
     </div>
 </body>
+
 </html>
