@@ -8,7 +8,7 @@ async function parseSoapResponseTracking(xml) {
         if (Array.isArray(tables)) {
             console.log("respuesta exitosa con informacion");
             return tables.map((table,index) => ({
-                ID: index + 1,
+                ID: tables.length - index,
                 //SOURCE: table.SOURCE,
                 //TYPE: table.TYPE,
                 //CODE: table.CODE,

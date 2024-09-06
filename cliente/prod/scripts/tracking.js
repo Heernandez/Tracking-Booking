@@ -1,8 +1,8 @@
-function booking() {
+function booking () {
     window.location.href = 'booking.html';
 }
 
-function logout() {
+function logout () {
     // Eliminar el token del sessionStorage
     sessionStorage.removeItem ('jwtToken');
     localStorage.removeItem ('jwtToken');
@@ -78,7 +78,7 @@ function handleSubmit(event) {
         const row = document.createElement('tr');
         Object.values (item).forEach(value => {
             const td = document.createElement('td');
-            td.textContent = typeof value === 'string' ? value.trim() : value; 
+            td.textContent = value.trim();
             row.appendChild(td);
         });
         tbody.appendChild(row);
