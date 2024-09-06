@@ -5,7 +5,7 @@ const bookingSchema = Joi.object({
     origin: Joi.string().required(),
     destination: Joi.string().required(),
     date: Joi.date().iso().required(),
-    hour: Joi.string().required(),
+    hourSelect: Joi.string().required(),
     flight: Joi.string(),//.required(),
     rateClass: Joi.string(), //.required(),
     priority: Joi.string(),//.required(),
