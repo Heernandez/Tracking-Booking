@@ -51,17 +51,18 @@ function handleSubmit (event) {
         const thead = document.createElement ('thead');
         const headerRow = document.createElement ('tr');
         const headers = [
-        'CODE',
-        'DATEIN',
-        'DATEINF',
-        'ID',
-        'NOTE',
-        'PIECES',
-        'REFERENCE',
-        'SOURCE',
-        'TYPE',
-        'USERID',
-        'WEIGHT',
+        //'CODE',
+        'No.',
+        'Date',
+        //'DATEINF',
+        //'ID',
+        'Note',
+        'Pieces',
+        //'REFERENCE',
+        //'SOURCE',
+        //'TYPE',
+        //'USERID',
+        'Weight',
         ];
         headers.forEach (headerText => {
         const th = document.createElement ('th');

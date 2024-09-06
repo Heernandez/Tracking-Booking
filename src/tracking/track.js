@@ -7,18 +7,18 @@ async function parseSoapResponseTracking(xml) {
         // Verifica si hay tablas y procesa la información
         if (Array.isArray(tables)) {
             console.log("respuesta exitosa con informacion");
-            return tables.map(table => ({
-                ID: table.ID,
-                SOURCE: table.SOURCE,
-                TYPE: table.TYPE,
-                CODE: table.CODE,
+            return tables.map((table,index) => ({
+                ID: index + 1,
+                //SOURCE: table.SOURCE,
+                //TYPE: table.TYPE,
+                //CODE: table.CODE,
                 DATEIN: table.DATEIN,
-                REFERENCE: table.REFERENCE,
+                //REFERENCE: table.REFERENCE,
+                NOTE: table.NOTE,
                 PIECES: table.PIECES,
                 WEIGHT: table.WEIGHT,
-                NOTE: table.NOTE,
-                USERID: table.USERID,
-                DATEINF: table.DATEINF,
+                //USERID: table.USERID,
+                //DATEINF: table.DATEINF,
             }));
         } else {
             console.log("respuesta exitosa sin informacion");
