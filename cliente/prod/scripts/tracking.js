@@ -78,7 +78,7 @@ function handleSubmit(event) {
         const row = document.createElement('tr');
         Object.values (item).forEach(value => {
             const td = document.createElement('td');
-            td.textContent = value.trim();
+            td.textContent = typeof value === 'string' ? value.trim() : value; // Verifica si es string
             row.appendChild(td);
         });
         tbody.appendChild(row);
