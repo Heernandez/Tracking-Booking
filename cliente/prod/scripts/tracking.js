@@ -1,8 +1,8 @@
-function booking () {
+function booking() {
     window.location.href = 'booking.html';
 }
 
-function logout () {
+function logout() {
     // Eliminar el token del sessionStorage
     sessionStorage.removeItem ('jwtToken');
     localStorage.removeItem ('jwtToken');
@@ -10,9 +10,9 @@ function logout () {
     window.location.href = 'login.html';
 }
 
-function handleSubmit (event) {
+function handleSubmit(event) {
     // Prevenir el envío del formulario para realizar un manejo manual
-    event.preventDefault ();
+    event.preventDefault();
     // Obtener el valor del input
     const trackId = document.getElementById ('trackId').value;
     // Recuperar el token guardado
@@ -33,7 +33,7 @@ function handleSubmit (event) {
         Authorization: `Bearer ${token}`,
     },
 })
-    .then (response => response.json ())
+    .then (response => response.json())
     .then (data => {
         // Manejo de la respuesta
         console.log ('Respuesta del servidor:', data);
@@ -46,10 +46,10 @@ function handleSubmit (event) {
             noResultsMessage.style.display = 'block';
         } else {
         // Crear tabla
-        const table = document.createElement ('table');
+        const table = document.createElement('table');
         // Crear encabezado
-        const thead = document.createElement ('thead');
-        const headerRow = document.createElement ('tr');
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
         const headers = [
         //'CODE',
         'No.',
@@ -65,31 +65,31 @@ function handleSubmit (event) {
         'Weight',
         ];
         headers.forEach (headerText => {
-        const th = document.createElement ('th');
+        const th = document.createElement('th');
         th.textContent = headerText;
-        headerRow.appendChild (th);
+        headerRow.appendChild(th);
         });
-        thead.appendChild (headerRow);
-        table.appendChild (thead);
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
 
         // Crear cuerpo de la tabla
-        const tbody = document.createElement ('tbody');
+        const tbody = document.createElement('tbody');
         data.forEach (item => {
-        const row = document.createElement ('tr');
-        Object.values (item).forEach (value => {
-            const td = document.createElement ('td');
-            td.textContent = value.trim ();
-            row.appendChild (td);
+        const row = document.createElement('tr');
+        Object.values (item).forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value.trim();
+            row.appendChild(td);
         });
-        tbody.appendChild (row);
+        tbody.appendChild(row);
         });
-        table.appendChild (tbody);
+        table.appendChild(tbody);
 
         // Agregar la tabla al contenedor de resultados
-        resultsContainer.appendChild (table);
+        resultsContainer.appendChild(table);
     }
     })
     .catch (error => {
-    console.error ('Error:', error);
+    console.error('Error:', error);
     });
 }
