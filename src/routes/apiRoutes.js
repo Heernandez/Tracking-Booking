@@ -231,16 +231,35 @@ async function sendEmail(to,  filenamePDF,fileBufferPDF,filenameXLS,fileBufferXL
     console.log("try send 4");
 }
 
+function formatDateString(dateString) {
+    // Asegúrate de que la cadena esté en formato "aaaa-mm-dd"
+    const date = new Date(dateString);
+    // Verifica si la fecha es válida
+    if (isNaN(date.getTime())) {
+        return dateString;
+    }
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
+    const year = date.getFullYear();
+
+    // Retorna la fecha en formato "dd/mm/aaaa"
+    return `${day}/${month}/${year}`;
+}
+
 // Ruta para manejar la solicitud de booking
 router.post('/booking', async (req, res) => {
     try {
         // Se validan los datos recibidos
-        console.log("data:\n",req.body)
+        console.log("data:\n",req.body);
+        if(req.body.date != ""){
+            req.body.date = formatDateString(req.body.date);
+        }
         const { error, value } = bookingSchema.validate(req.body);
         if (error) {
             console.log(error,"\n",error.details[0].message );
             return res.status(400).json({ error: error.details[0].message });
         }
+        
         // Generacion del pdf
         let fileBufferPDF = await generatePDF(value);
         let filenamePDF = 'booking.pdf';
