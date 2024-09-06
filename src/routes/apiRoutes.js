@@ -62,28 +62,23 @@ async function generateExcel(data) {
         { header: 'Origin', key: 'origin', width: 20 },
         { header: 'Destination', key: 'destination', width: 20 },
         { header: 'Date', key: 'date', width: 20 },
-        { header: 'Flight', key: 'flight', width: 20 },
-        { header: 'Rate Class', key: 'rateClass', width: 20 },
-        { header: 'Priority', key: 'priority', width: 20 },
         { header: 'Shipper', key: 'shipper', width: 20 },
         { header: 'Consignee', key: 'consignee', width: 20 },
         { header: 'Agent', key: 'agent', width: 20 }
     ];
+    let fullDate = data.date + "-" + data.hourSelect;
     worksheet.addRow({
         airwaybill: data.airwaybill,
         origin: data.origin,
         destination: data.destination,
-        date: data.date,
-        flight: data.flight,
-        rateClass: data.rateClass,
-        priority: data.priority,
+        date: fullDate,
         shipper: data.shipper,
         consignee: data.consignee,
         agent: data.agent
     });
     // Añadir una fila en blanco para separar los datos
     worksheet.addRow(); 
-// Se agregan los datos de cargo
+    // Se agregan los datos de cargo
     worksheet.addRow(['Pieces', 'Packing', 'Weight', 'Length', 'Width', 'Height', 'Volume', 'Reference', 'Note']); // Encabezado de la tabla de cargo
     // Se valida si hay datos de cargo para agregar
     if (data.cargo && data.cargo.length > 0) {
@@ -138,10 +133,7 @@ async function generatePDF(data) {
         doc.fontSize(10).text(`Airway Bill: ${data.airwaybill}`);
         doc.text(`Origin: ${data.origin}`);
         doc.text(`Destination: ${data.destination}`);
-        doc.text(`Date: ${data.date}`);
-        doc.text(`Flight: ${data.flight}`);
-        doc.text(`Rate Class: ${data.rateClass}`);
-        doc.text(`Priority: ${data.priority}`);
+        doc.text(`Date: ${data.date} - ${data.hourSelect}`);
         doc.text(`Shipper: ${data.shipper}`);
         doc.text(`Consignee: ${data.consignee}`);
         doc.text(`Agent: ${data.agent}`);

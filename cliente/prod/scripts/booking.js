@@ -214,7 +214,7 @@ function handleSubmit(event) {
     .then(data => {
         console.log('Success:', data);
         alert('Booking submitted successfully!');
-        window.location.reload();
+        //window.location.reload();
     }).catch((error) => {
         console.error('Error:', error);
         alert('Error submitting booking.');
