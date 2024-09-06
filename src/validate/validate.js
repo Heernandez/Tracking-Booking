@@ -5,12 +5,13 @@ const bookingSchema = Joi.object({
     origin: Joi.string().required(),
     destination: Joi.string().required(),
     date: Joi.date().iso().required(),
-    flight: Joi.string().required(),
-    rateClass: Joi.string().required(),
-    priority: Joi.string().required(),
+    hour: Joi.string().required(),
+    flight: Joi.string(),//.required(),
+    rateClass: Joi.string(), //.required(),
+    priority: Joi.string(),//.required(),
     shipper: Joi.string().required(),
     consignee: Joi.string().required(),
-    agent: Joi.string().required(),
+    agent: Joi.string(),//.required(),
     
     // Validación para la tabla de cargo
     cargo: Joi.array().items(Joi.object({

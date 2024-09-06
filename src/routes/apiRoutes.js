@@ -209,7 +209,7 @@ async function generatePDF(data) {
     });
 }
 // Función para enviar el archivo por correo electrónico
-async function sendEmail(to, fileBuffer, filename) {
+async function sendEmail(to,  filenamePDF,fileBufferPDF,filenameXLS,fileBufferXLS ) {
     console.log("try send to:",process.env.EMAIL_CONTACT_CENTER);
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -225,8 +225,12 @@ async function sendEmail(to, fileBuffer, filename) {
         text: 'Please find your booking details attached.',
         attachments: [
             {
-                filename: filename,
-                content: fileBuffer,
+                filename: filenamePDF,
+                content: fileBufferPDF,
+            },
+            {
+                filename: filenameXLS,
+                content: fileBufferXLS,
             },
         ],
     };
@@ -245,28 +249,16 @@ router.post('/booking', async (req, res) => {
             console.log(error,"\n",error.details[0].message );
             return res.status(400).json({ error: error.details[0].message });
         }
-        // Determinar el formato y generar el archivo
-        // Puedes cambiar a 'excel' según sea necesario
-        // Se debe definir la forma en la que se debe elegir la opcion
-        const format = 'pdf'; 
-        let fileBuffer;
-        let filename;
+        // Generacion del pdf
+        let fileBufferPDF = await generatePDF(value);
+        let filenamePDF = 'booking.pdf';
 
-        if (format === 'pdf') {
-            fileBuffer = await generatePDF(value);
-            filename = 'booking.pdf';
-        } else if (format === 'excel') {
-            fileBuffer = await generateExcel(value);
-            filename = 'booking.xlsx';
-        }
-        // Se valida si se marcó el check para enviar el correo
-        if(value.sendEmail){
-            await sendEmail(process.env.EMAIL_CONTACT_CENTER, fileBuffer, filename);
-            res.status(200).json({ message: 'Booking received and file sent via email.' });
-        }else{
-            console.log("no se envía correo");
-            res.status(200).json({ message: 'Booking received but file wasnt send via email.' });
-        }
+        // Generacion del XLS
+        let fileBufferXLS = await generateExcel(value);
+        let filenameXLS = 'booking.xlsx';
+        await sendEmail(process.env.EMAIL_CONTACT_CENTER,filenamePDF, fileBufferPDF,filenameXLS ,fileBufferXLS);
+        res.status(200).json({ message: 'Booking received and file sent via email.' });
+
     } catch (err) {
         console.error('Error processing booking:', err);
         res.status(500).json({ error: 'Your request could not be processed, please try again later.\nIf the error persists, contact Support.(SE01)' });

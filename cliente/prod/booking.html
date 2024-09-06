@@ -51,17 +51,8 @@
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required><br><br>
 
-        <label for="flight">Flight:</label>
-        <input type="text" id="flight" name="flight" required><br><br>
-
-        <label for="rateClass">Rate Class:</label>
-        <select id="rateClass" name="rateClass" required>
-            <option value="">Seleccione una clase</option>
-            <!-- Las opciones serán cargadas dinámicamente -->
-        </select><br><br>
-        <label for="priority">Priority:</label>
-        <select id="priority" name="priority" required>
-            <option value="">Seleccione una prioridad</option>
+        <select id="hourSelect" name="hourSelect" required>
+            <option value="">--</option>
             <!-- Las opciones serán cargadas dinámicamente -->
         </select><br><br>
         <label for="shipper">Shipper:</label>
@@ -69,9 +60,6 @@
 
         <label for="consignee">Consignee:</label>
         <input type="text" id="consignee" name="consignee" required><br><br>
-
-        <label for="agent">Agent:</label>
-        <input type="text" id="agent" name="agent" required><br><br>
 
         <h2>Cargo Details</h2>
         <table id="cargoTable">

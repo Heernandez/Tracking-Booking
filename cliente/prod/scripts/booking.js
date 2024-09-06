@@ -20,30 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         })
         .catch(error => console.error('Error al cargar los países:', error));
-    
-    // Llenar selector rate class
-    fetch('https://heernandezdev.com/api/v1/getRateClass')
-        .then(response => response.json())
-        .then(data => {
-            const selectRate = document.getElementById('rateClass');
-            data.forEach(rateClass => {
-                // crear opcion para el origen
-                const optionRate = document.createElement('option');
-                optionRate.value = rateClass.VALUE;
-                optionRate.textContent = rateClass.VALUE;
-                selectRate.appendChild(optionRate);
-            });
-        })
-        .catch(error => console.error('Error al cargar los rate class:', error));
-    // Llenar selector prority
-    const selectPriority = document.getElementById('priority');
-    for(let i=1;i<6;i++) {
-        // crear opcion para el origen
-        const optionPriority = document.createElement('option');
-        optionPriority.value = i;
-        optionPriority.textContent = i
-        selectPriority.appendChild(optionPriority);
-    }
+
+    // Llenar selector AM/PM
+    const selectHour = document.getElementById('hourSelect');
+
+    const optionAM = document.createElement('option');
+    optionAM.value = "AM";
+    optionAM.textContent = "AM";
+    selectHour.appendChild(optionAM);
+    // crear opcion para el origen
+    const optionPM = document.createElement('option');
+    optionPM.value = "PM";
+    optionPM.textContent = "PM";
+    selectHour.appendChild(optionPM);
+
 
     //
     const inputs = document.querySelectorAll('input[type="number"][name="length[]"], input[type="number"][name="width[]"], input[type="number"][name="height[]"]');
