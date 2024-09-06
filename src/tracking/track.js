@@ -1,5 +1,21 @@
 const { parseStringPromise } = require('xml2js');
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+
+    const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true // Para AM/PM
+    };
+
+    return date.toLocaleString('en-US', options).replace(',', '');
+}
+
 async function parseSoapResponseTracking(xml) {
     try {
         const result = await parseStringPromise(xml, { explicitArray: false, ignoreAttrs: true });
@@ -12,7 +28,7 @@ async function parseSoapResponseTracking(xml) {
                 //SOURCE: table.SOURCE,
                 //TYPE: table.TYPE,
                 //CODE: table.CODE,
-                DATEIN: table.DATEIN,
+                DATEIN: formatDate(table.DATEIN), 
                 //REFERENCE: table.REFERENCE,
                 NOTE: table.NOTE,
                 PIECES: table.PIECES,
