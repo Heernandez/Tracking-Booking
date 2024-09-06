@@ -1,4 +1,18 @@
-
+function formatDate() {
+    const dateInput = document.getElementById('date');
+    const dateValue = dateInput.value;
+    
+    if (dateValue) {
+        const date = new Date(dateValue);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan desde 0
+        const year = date.getFullYear();
+        
+        const formattedDate = `${day}/${month}/${year}`;
+        // Establecer el valor formateado en el input
+        dateInput.value = formattedDate;
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
     // Llenar selector origen y destino
     fetch('https://heernandezdev.com/api/v1/getDestination')
@@ -54,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
-
 
 function validateSelection() {
     if (originSelect.value === destinationSelect.value && originSelect.value !== "") {
@@ -134,7 +147,6 @@ function calculateTotals() {
     document.getElementById('totalWeight').value = totalWeight.toFixed(2);
     document.getElementById('totalVolume').value = totalVolume.toFixed(2);
 }
-
 document.getElementById('cargoTable').addEventListener('input', calculateTotals);
 
 function handleSubmit(event) {
@@ -150,6 +162,7 @@ function handleSubmit(event) {
     */
     const token = "QWERTYUIOP";
     // Obtener datos del formulario
+    formatDate();
     const formData = new FormData(document.getElementById('bookingForm'));
     
     // Construir el objeto final excluyendo los campos no deseados

@@ -4,7 +4,7 @@ const bookingSchema = Joi.object({
     airwaybill: Joi.string().required(),
     origin: Joi.string().required(),
     destination: Joi.string().required(),
-    date: Joi.date().iso().required(),
+    date: Joi.string().required(),
     hourSelect: Joi.string().required(),
     flight: Joi.string(),//.required(),
     rateClass: Joi.string(), //.required(),
