@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     optionPM.textContent = "PM";
     selectHour.appendChild(optionPM);
 
+    // Obtener el nombre del agente
+    document.getElementById('agent').value = "John Doe";
+
+
 
     //
     const inputs = document.querySelectorAll('input[type="number"][name="length[]"], input[type="number"][name="width[]"], input[type="number"][name="height[]"]');
