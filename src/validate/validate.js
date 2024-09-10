@@ -9,7 +9,7 @@ const bookingSchema = Joi.object({
     flight: Joi.string(),//.required(),
     rateClass: Joi.string(), //.required(),
     priority: Joi.string(),//.required(),
-    shipper: Joi.string().required(),
+    shipper: Joi.string(),//.required(),
     consignee: Joi.string().required(),
     agent: Joi.string(),//.required(),
     
