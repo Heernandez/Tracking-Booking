@@ -290,7 +290,9 @@ async function generatePDF(data) {
 
     // Configurar el contenido de la página
     await page.setContent(filledHtml, { waitUntil: 'networkidle0' });
-
+    
+    const htmlContent = await page.content();
+    fs.writeFileSync('output.html', htmlContent);
     // Generar el PDF
     const pdfBuffer = await page.pdf({ format: 'A4' });
 
