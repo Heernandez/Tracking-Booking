@@ -211,13 +211,21 @@ function handleSubmit(event) {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(finalData)
-    }).then(response => response.json())
+    }).then(response => {
+        // Verifica si la respuesta es exitosa
+        if (!response.ok) {
+            // Lanza un error si la respuesta tiene un código de estado fuera del rango 200-299
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('Success:', data);
         alert('Booking submitted successfully!');
-        //window.location.reload();
-    }).catch((error) => {
+        window.location.reload();
+    })
+    .catch((error) => {
         console.error('Error:', error);
-        alert('Error submitting booking.');
+        alert('Error submitting booking: ' + error.message);
     });
 }
