@@ -294,7 +294,7 @@ async function generatePDF(data) {
     const htmlContent = await page.content();
     fs.writeFileSync('output.html', htmlContent);
     // Generar el PDF
-    const pdfBuffer = await page.pdf({ format: 'A4' });
+    const pdfBuffer = await page.pdf({ format: 'A4',printBackground: true });
 
     await browser.close();
 
