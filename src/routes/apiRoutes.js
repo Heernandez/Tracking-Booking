@@ -252,7 +252,11 @@ async function generatePDF2(data) {
     return pdfBuffer;
 }
 
-
+// Función para convertir una imagen a base64
+function imageToBase64(filePath) {
+    const image = fs.readFileSync(filePath);
+    return `data:image/png;base64,${image.toString('base64')}`;
+}
 
 async function generatePDF(data) {
     const browser = await puppeteer.launch({
@@ -264,7 +268,9 @@ async function generatePDF(data) {
     const templatePath = path.join(__dirname, 'template.html');
     const templateSource = fs.readFileSync(templatePath, 'utf8');
     const template = handlebars.compile(templateSource);
-
+    // Leer la imagen y convertirla a base64
+    const imagePath = path.join(__dirname, 'aircargo-white.png'); // Reemplaza con el nombre de tu imagen
+    const base64Image = imageToBase64(imagePath);
     // Crear el HTML con los datos
     const filledHtml = template({
         airwaybill: data.airwaybill,
@@ -279,7 +285,7 @@ async function generatePDF(data) {
         totalWeight: data.totalWeight,
         totalVolume: data.totalVolume,
         cargo: data.cargo,
-        headerImage: 'YOUR_BASE64_IMAGE_STRING' // Si necesitas una imagen en base64
+        headerImage: base64Image // Si necesitas una imagen en base64
     });
 
     // Configurar el contenido de la página
