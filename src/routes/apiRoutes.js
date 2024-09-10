@@ -8,6 +8,8 @@ const stream = require('stream');
 const ExcelJS = require('exceljs');
 const nodemailer = require('nodemailer');
 const {authenticateToken,generateAccessToken,saveGenerateToken } = require('../auth/auth'); // Importar el middleware
+const pdf = require('html-pdf');
+const path = require('path');
 
 // Ruta para consultar tracking
 router.get('/search',async (req, res) => {
@@ -200,6 +202,123 @@ async function generatePDF(data) {
         });
     });
 }
+async function generatePDF2(data) {
+    return new Promise((resolve, reject) => {
+        // Plantilla HTML con estilos en línea y con datos dinámicos
+        const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .header img {
+                    max-width: 150px;
+                }
+                .title {
+                    text-align: center;
+                    font-size: 24px;
+                    margin-bottom: 20px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+                table, th, td {
+                    border: 1px solid black;
+                    padding: 10px;
+                    text-align: center;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                .totals {
+                    font-size: 16px;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div>
+                    <h1>Booking Details</h1>
+                    <p>Airway Bill: ${data.airwaybill}</p>
+                    <p>Origin: ${data.origin}</p>
+                    <p>Destination: ${data.destination}</p>
+                    <p>Date: ${data.date} - ${data.hourSelect}</p>
+                    <p>Shipper: ${data.shipper}</p>
+                    <p>Consignee: ${data.consignee}</p>
+                    <p>Agent: ${data.agent}</p>
+                </div>
+                <div>
+                    <img src="${path.join(__dirname, 'logo.png')}" alt="Logo" />
+                </div>
+            </div>
+
+            <h2 class="title">Cargo Details</h2>
+            <table>
+                <tr>
+                    <th>Pieces</th>
+                    <th>Packing</th>
+                    <th>Weight</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Volume</th>
+                    <th>Reference</th>
+                    <th>Note</th>
+                </tr>
+                ${data.cargo.map(item => `
+                <tr>
+                    <td>${item.pieces}</td>
+                    <td>${item.packing}</td>
+                    <td>${item.weight}</td>
+                    <td>${item.length}</td>
+                    <td>${item.width}</td>
+                    <td>${item.height}</td>
+                    <td>${item.volume}</td>
+                    <td>${item.reference}</td>
+                    <td>${item.note}</td>
+                </tr>
+                `).join('')}
+            </table>
+
+            <div class="totals">
+                <p><strong>Total Pieces:</strong> ${data.totalPieces}</p>
+                <p><strong>Total Weight:</strong> ${data.totalWeight}</p>
+                <p><strong>Total Volume:</strong> ${data.totalVolume}</p>
+            </div>
+        </body>
+        </html>
+        `;
+
+        const options = {
+            format: 'A4',
+            orientation: 'portrait',
+            border: {
+                top: '10mm',
+                right: '10mm',
+                bottom: '10mm',
+                left: '10mm'
+            }
+        };
+
+        pdf.create(htmlContent, options).toBuffer((err, buffer) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(buffer);
+        });
+    });
+}
+
 // Función para enviar el archivo por correo electrónico
 async function sendEmail(to,  filenamePDF,fileBufferPDF,filenameXLS,fileBufferXLS ) {
     console.log("try send to:",process.env.EMAIL_CONTACT_CENTER);
@@ -261,7 +380,7 @@ router.post('/booking', async (req, res) => {
         }
         
         // Generacion del pdf
-        let fileBufferPDF = await generatePDF(value);
+        let fileBufferPDF = await generatePDF2(value);
         let filenamePDF = 'booking.pdf';
 
         // Generacion del XLS
