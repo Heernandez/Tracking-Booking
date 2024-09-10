@@ -11,7 +11,7 @@ const {authenticateToken,generateAccessToken,saveGenerateToken } = require('../a
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-
+const handlebars = require('handlebars');
 // Ruta para consultar tracking
 router.get('/search',async (req, res) => {
     const { trackId } = req.query;
@@ -120,7 +120,7 @@ async function generateExcel(data) {
     const buffer = await workbook.xlsx.writeBuffer();
     return buffer;
 }
-async function generatePDF2(data) {
+async function generatePDF3(data) {
     return new Promise((resolve, reject) => {
         const doc = new PDFDocument();
         const buffers = [];
@@ -203,7 +203,7 @@ async function generatePDF2(data) {
         });
     });
 }
-async function generatePDF(data) {
+async function generatePDF2(data) {
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
@@ -251,6 +251,48 @@ async function generatePDF(data) {
 
     return pdfBuffer;
 }
+
+
+
+async function generatePDF(data) {
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+
+    // Leer y compilar la plantilla HTML
+    const templatePath = path.join(__dirname, 'template.html');
+    const templateSource = fs.readFileSync(templatePath, 'utf8');
+    const template = handlebars.compile(templateSource);
+
+    // Crear el HTML con los datos
+    const filledHtml = template({
+        airwaybill: data.airwaybill,
+        origin: data.origin,
+        destination: data.destination,
+        date: data.date,
+        hourSelect: data.hourSelect,
+        shipper: data.shipper,
+        consignee: data.consignee,
+        agent: data.agent,
+        totalPieces: data.totalPieces,
+        totalWeight: data.totalWeight,
+        totalVolume: data.totalVolume,
+        cargo: data.cargo,
+        headerImage: 'YOUR_BASE64_IMAGE_STRING' // Si necesitas una imagen en base64
+    });
+
+    // Configurar el contenido de la página
+    await page.setContent(filledHtml, { waitUntil: 'networkidle0' });
+
+    // Generar el PDF
+    const pdfBuffer = await page.pdf({ format: 'A4' });
+
+    await browser.close();
+
+    return pdfBuffer;
+}
+
 
 // Función para enviar el archivo por correo electrónico
 async function sendEmail(to,  filenamePDF,fileBufferPDF,filenameXLS,fileBufferXLS ) {
