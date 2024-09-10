@@ -76,6 +76,11 @@
         .footer p {
             margin: 5px 0;
         }
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+            }
+        }
     </style>
 </head>
 <body>
