@@ -204,7 +204,9 @@ async function generatePDF2(data) {
     });
 }
 async function generatePDF(data) {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
     // Cargar HTML desde el archivo
@@ -278,6 +280,47 @@ async function sendEmail(to,  filenamePDF,fileBufferPDF,filenameXLS,fileBufferXL
     };
     console.log("try send 3");
     await transporter.sendMail(mailOptions);
+    console.log("try send 4");
+}
+
+async function sendEmailSMTP(to, filenamePDF, fileBufferPDF, filenameXLS, fileBufferXLS) {
+    console.log("try send to:", process.env.EMAIL_CONTACT_CENTER);
+
+    // Configura el transporte SMTP
+    let transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST, // e.g., 'smtp.your-email-provider.com'
+        port: process.env.SMTP_PORT, // e.g., 587 for TLS or 465 for SSL
+        secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+        auth: {
+            user: process.env.SMTP_USER, // Tu dirección de correo o nombre de usuario
+            pass: process.env.SMTP_PASS, // La contraseña de tu cuenta
+        },
+    });
+
+    let mailOptions = {
+        from: process.env.SMTP_USER,
+        to: to || process.env.EMAIL_CONTACT_CENTER,
+        subject: 'Your Booking Details',
+        text: 'Please find your booking details attached.',
+        attachments: [
+            {
+                filename: filenamePDF,
+                content: fileBufferPDF,
+            },
+            {
+                filename: filenameXLS,
+                content: fileBufferXLS,
+            },
+        ],
+    };
+
+    console.log("try send 3");
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Email sent successfully");
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
     console.log("try send 4");
 }
 
