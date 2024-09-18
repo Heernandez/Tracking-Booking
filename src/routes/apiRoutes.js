@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const { parseSoapResponseTracking , parseSoapResponseGetDestination, parseSoapResponseGetRateClass} = require('../tracking/track');
+const { parseSoapResponseAwbno, parseSoapResponseTracking , parseSoapResponseGetDestination, parseSoapResponseGetRateClass} = require('../tracking/track');
 const { bookingSchema } = require('../validate/validate');
 const PDFDocument = require('pdfkit');
 const stream = require('stream');
@@ -14,15 +14,37 @@ const path = require('path');
 const handlebars = require('handlebars');
 // Ruta para consultar tracking
 router.get('/search',async (req, res) => {
+    console.log("eyy");
     const { trackId } = req.query;
     // Validar que trackId es numérico
     if (!trackId || isNaN(trackId)) {
         return res.status(400).send('El parámetro trackId debe ser un número válido.');
     }
     try {
-        
         const soapApiUrl = process.env.EXTERNAL_API_URL; // URL de la api de consulta
-        const soapRequest = `
+        // Consultar la informacion principal
+        
+        const soapRequestAwbno = `
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <tem:getTrackAwb>
+                        <tem:pAwbno>${trackId}</tem:pAwbno>
+                    </tem:getTrackAwb>
+                </soapenv:Body>
+            </soapenv:Envelope>
+        `;
+        console.log(soapRequestAwbno)
+        const responseAwbno = await axios.post(soapApiUrl, soapRequestAwbno, {
+            headers: {
+                'Content-Type': 'text/xml; charset=utf-8'
+            }
+        });
+        console.log("lucho resp: \n", responseAwbno.data);
+        const parsedDataAwbno = await parseSoapResponseAwbno(responseAwbno.data);
+        
+        // Consultar los detalles del tracking
+        const soapRequestTracking = `
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
                 <soapenv:Header/>
                 <soapenv:Body>
@@ -32,13 +54,13 @@ router.get('/search',async (req, res) => {
                 </soapenv:Body>
             </soapenv:Envelope>
         `;
-        const response = await axios.post(soapApiUrl, soapRequest, {
+        const responseTracking = await axios.post(soapApiUrl, soapRequestTracking, {
             headers: {
                 'Content-Type': 'text/xml; charset=utf-8'
             }
         });
-        const parsedData = await parseSoapResponseTracking(response.data);
-        res.json(parsedData);
+        const parsedData = await parseSoapResponseTracking(responseTracking.data);
+        res.json({"header": parsedDataAwbno,"body":parsedData});
     } catch (error) {
         console.error('Error en la solicitud SOAP:', error);
         res.status(500).json({ error: 'Your request could not be processed, please try again later.\nIf the error persists, contact Support.(GT01)' });

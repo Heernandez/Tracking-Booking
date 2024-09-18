@@ -46,6 +46,35 @@ async function parseSoapResponseTracking(xml) {
     }
 }
 
+async function parseSoapResponseAwbno(xml) {
+    try {
+        console.log("parser 2");
+        const result = await parseStringPromise(xml, { explicitArray: false, ignoreAttrs: true });
+        const tables = result['soap:Envelope']['soap:Body']['getTrackAwbResponse']['getTrackAwbResult']['diffgr:diffgram']['NewDataSet']['Table'];
+        
+        // Verifica si hay una tabla y si no es un array, la convierte en uno
+        const tableArray = Array.isArray(tables) ? tables : [tables];
+    
+        // Verifica si hay tablas y procesa la información
+        if (tableArray.length > 0) {
+            console.log("respuesta exitosa con información");
+            return tableArray.map((table, index) => ({
+                ORIGIN: table.origin.trim(),
+                DESTINATION: table.destination.trim(),
+                PIECES: table.totpieces.trim(),
+                WEIGHT: table.totweight.trim(),
+                VOLUME: table.totvolume.trim(),
+            }));
+        } else {
+            console.log("respuesta exitosa sin información");
+            return [];
+        }
+    } catch (error) {
+        console.error('Error parsing XML:', error);
+        return [];
+    }
+}
+
 async function parseSoapResponseGetDestination(xml) {
     try {
         const result = await parseStringPromise(xml, { explicitArray: false, ignoreAttrs: true });
@@ -88,6 +117,7 @@ async function parseSoapResponseGetRateClass(xml) {
     }
 }
 module.exports = { 
+    parseSoapResponseAwbno,
     parseSoapResponseTracking, 
     parseSoapResponseGetDestination ,
     parseSoapResponseGetRateClass

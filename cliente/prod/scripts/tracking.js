@@ -25,7 +25,7 @@ function handleSubmit(event) {
         window.location.href = 'login.html';
     }
     */
-  // Construir la URL con el parámetro trackId
+    // Construir la URL con el parámetro trackId
     const url = `https://heernandezdev.com/api/v1/search?trackId=${encodeURIComponent (trackId)}`;
     fetch (url, {
     method: 'GET',
@@ -45,49 +45,91 @@ function handleSubmit(event) {
         if (data.length === 0) {
             noResultsMessage.style.display = 'block';
         } else {
-        // Crear tabla
-        const table = document.createElement('table');
-        // Crear encabezado
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        const headers = [
-        //'CODE',
-        'No.',
-        'Date',
-        //'DATEINF',
-        //'ID',
-        'Note',
-        'Pieces',
-        //'REFERENCE',
-        //'SOURCE',
-        //'TYPE',
-        //'USERID',
-        'Weight',
-        ];
-        headers.forEach (headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
+            // Crear tabla cabecera
+            const table1 = document.createElement('table');
+            // Crear encabezado
+            const thead1 = document.createElement('thead');
+            const headerRow1 = document.createElement('tr');
+            const headers1 = [
+            'Origin',
+            'Destination',
+            'Pieces',
+            'Weight',
+            'Volume'
+            ];
+            headers1.forEach (headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow1.appendChild(th);
+            });
+            thead1.appendChild(headerRow1);
+            table1.appendChild(thead1);
+            
+            // Crear cuerpo de la tabla del header
+            const tbody1 = document.createElement('tbody');
+            data.header.forEach (item => {
+            const row1 = document.createElement('tr');
+            Object.values (item).forEach(value => {
+                const td = document.createElement('td');
+                td.textContent = typeof value === 'string' ? value.trim() : value; // Verifica si es string
+                row1.appendChild(td);
+            });
+            tbody1.appendChild(row1);
+            });
+            table1.appendChild(tbody1);
 
-        // Crear cuerpo de la tabla
-        const tbody = document.createElement('tbody');
-        data.forEach (item => {
-        const row = document.createElement('tr');
-        Object.values (item).forEach(value => {
-            const td = document.createElement('td');
-            td.textContent = typeof value === 'string' ? value.trim() : value; // Verifica si es string
-            row.appendChild(td);
-        });
-        tbody.appendChild(row);
-        });
-        table.appendChild(tbody);
+            // Agregar la tabla al contenedor de resultados
+            resultsContainer.appendChild(table1);
+            // Agregar espacios
+            for( let a = 0; a < 5 ; a++){
+                const espacio = document.createElement('br');
+                resultsContainer.appendChild(espacio);
+            }
+            
 
-        // Agregar la tabla al contenedor de resultados
-        resultsContainer.appendChild(table);
-    }
+            // Crear tabla
+            const table = document.createElement('table');
+            // Crear encabezado
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const headers = [
+            //'CODE',
+            'No.',
+            'Date',
+            //'DATEINF',
+            //'ID',
+            'Note',
+            'Pieces',
+            //'REFERENCE',
+            //'SOURCE',
+            //'TYPE',
+            //'USERID',
+            'Weight',
+            ];
+            headers.forEach (headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Crear cuerpo de la tabla
+            const tbody = document.createElement('tbody');
+            data.body.forEach (item => {
+                const row = document.createElement('tr');
+                Object.values (item).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = typeof value === 'string' ? value.trim() : value; // Verifica si es string
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+
+            // Agregar la tabla al contenedor de resultados
+            resultsContainer.appendChild(table);
+        }
     })
     .catch (error => {
     console.error('Error:', error);
