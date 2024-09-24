@@ -50,7 +50,7 @@ async function parseSoapResponseAwbno(xml) {
     try {
         console.log("parser 2");
         const result = await parseStringPromise(xml, { explicitArray: false, ignoreAttrs: true });
-        const tables = result['soap:Envelope']['soap:Body']['getTrackAwbResponse']['getTrackAwbResult']['diffgr:diffgram']['NewDataSet']['Table'];
+        const tables = result['soap:Envelope']['soap:Body']['getFlightAwbResponse']['getFlightAwbResult']['diffgr:diffgram']['NewDataSet']['Table'];
         
         // Verifica si hay una tabla y si no es un array, la convierte en uno
         const tableArray = Array.isArray(tables) ? tables : [tables];
@@ -62,8 +62,9 @@ async function parseSoapResponseAwbno(xml) {
                 ORIGIN: table.origin.trim(),
                 DESTINATION: table.destination.trim(),
                 PIECES: table.totpieces.trim(),
-                WEIGHT: table.totweight.trim(),
-                VOLUME: table.totvolume.trim(),
+                WEIGHT: table.weight.trim(),
+                VOLUME: table.volume.trim(),
+                FLIGHT: table.flight.trim(),
             }));
         } else {
             console.log("respuesta exitosa sin información");

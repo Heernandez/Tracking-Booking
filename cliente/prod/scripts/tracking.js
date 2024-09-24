@@ -32,7 +32,7 @@ function handleSubmit(event) {
     headers: {
         Authorization: `Bearer ${token}`,
     },
-})
+    })
     .then (response => response.json())
     .then (data => {
         // Manejo de la respuesta
@@ -46,12 +46,16 @@ function handleSubmit(event) {
         if (data.header.length === 0 || data.body.length === 0) {
             noResultsMessage.style.display = 'block';
         } else {
+            const airwaybill = document.createElement('h3');
+            airwaybill.textContent = `Airwaybill: ${trackId}`;
+            resultsContainer.appendChild(airwaybill);
             const title1 = document.createElement('h4');
             title1.textContent ="General tracking information";
+            title1.className = "table-title";
             resultsContainer.appendChild(title1);
             // Crear tabla cabecera
             const table1 = document.createElement('table');
-            table1..className = "general-table";
+            table1.className = "general-table";
             // Crear encabezado
             const thead1 = document.createElement('thead');
             const headerRow1 = document.createElement('tr');
@@ -60,7 +64,8 @@ function handleSubmit(event) {
             'Destination',
             'Pieces',
             'Weight',
-            'Volume'
+            'Volume',
+            'Flight'
             ];
             headers1.forEach (headerText => {
             const th = document.createElement('th');
@@ -93,6 +98,7 @@ function handleSubmit(event) {
             }*/
             const title2 = document.createElement('h4');
             title2.textContent ="Detail tracking information";
+            title2.className = "table-title";
             resultsContainer.appendChild(title2);
             // Crear tabla
             const table = document.createElement('table');
