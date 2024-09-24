@@ -42,7 +42,7 @@ function handleSubmit(event) {
         // Limpiar los resultados anteriores
         resultsContainer.innerHTML = '';
         noResultsMessage.style.display = 'none';
-        if (data.length === 0) {
+        if (data.header.length === 0 || data.body.length === 0) {
             noResultsMessage.style.display = 'block';
         } else {
             // Crear tabla cabecera

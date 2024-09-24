@@ -40,13 +40,18 @@ function handleSubmit(event) {
         const resultsContainer = document.getElementById ('results');
         const noResultsMessage = document.getElementById ('noResults');
         // Limpiar los resultados anteriores
+      
         resultsContainer.innerHTML = '';
         noResultsMessage.style.display = 'none';
-        if (data.length === 0) {
+        if (data.header.length === 0 || data.body.length === 0) {
             noResultsMessage.style.display = 'block';
         } else {
+            const title1 = document.createElement('h4');
+            title1.textContent ="General tracking information";
+            resultsContainer.appendChild(title1);
             // Crear tabla cabecera
             const table1 = document.createElement('table');
+            table1..className = "general-table";
             // Crear encabezado
             const thead1 = document.createElement('thead');
             const headerRow1 = document.createElement('tr');
@@ -81,12 +86,14 @@ function handleSubmit(event) {
             // Agregar la tabla al contenedor de resultados
             resultsContainer.appendChild(table1);
             // Agregar espacios
+            /*
             for( let a = 0; a < 5 ; a++){
                 const espacio = document.createElement('br');
                 resultsContainer.appendChild(espacio);
-            }
-            
-
+            }*/
+            const title2 = document.createElement('h4');
+            title2.textContent ="Detail tracking information";
+            resultsContainer.appendChild(title2);
             // Crear tabla
             const table = document.createElement('table');
             // Crear encabezado
