@@ -23,6 +23,7 @@ router.get('/search',async (req, res) => {
     try {
         const soapApiUrl = process.env.EXTERNAL_API_URL; // URL de la api de consulta
         // Consultar la informacion principal
+
         const soapRequestAwbno = `
         <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">
             <soap:Header/>
@@ -32,11 +33,12 @@ router.get('/search',async (req, res) => {
                     <tem:pAwbno>${trackId}</tem:pAwbno>
                 </tem:getFlightAwb>
             </soap:Body>
+        </soap:Envelope>
         `;
         console.log(soapRequestAwbno)
         const responseAwbno = await axios.post(soapApiUrl, soapRequestAwbno, {
             headers: {
-                'Content-Type': ': application/soap+xml; charset=utf-8'
+                'Content-Type': 'text/xml; charset=utf-8'
             }
         });
         console.log("lucho resp: \n", responseAwbno.data);
