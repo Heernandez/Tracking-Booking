@@ -36,7 +36,7 @@ router.get('/search',async (req, res) => {
         console.log(soapRequestAwbno)
         const responseAwbno = await axios.post(soapApiUrl, soapRequestAwbno, {
             headers: {
-                'Content-Type': 'text/xml; charset=utf-8'
+                'Content-Type': ': application/soap+xml; charset=utf-8'
             }
         });
         console.log("lucho resp: \n", responseAwbno.data);
