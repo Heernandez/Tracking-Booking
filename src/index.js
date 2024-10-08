@@ -15,10 +15,11 @@ const app = express();
 //app.use(cors());
 
 app.use(cors({
-    origin: process.env.DOMAIN,
+    origin: '*',//process.env.DOMAIN,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['*', 'Content-Type', 'Accept', 'Authorization'],
+    allowedHeaders: ['Origin','X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
 }));
+
 app.use(helmet());
 
 const port = process.env.PORT || 3000;

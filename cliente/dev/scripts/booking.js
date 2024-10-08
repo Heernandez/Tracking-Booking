@@ -1,3 +1,83 @@
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Llenar selector origen y destino
+    fetch('http://localhost:3000/api/v1/getDestination')
+        .then(response => response.json())
+        .then(data => {
+            const selectOrigen = document.getElementById('origin');
+            const selectDestiny = document.getElementById('destination');
+            data.forEach(country => {
+                // crear opcion para el origen
+                const optionOrigen = document.createElement('option');
+                optionOrigen.value = country.ID;
+                optionOrigen.textContent = country.VALUE;
+                selectOrigen.appendChild(optionOrigen);
+                // crear opcion para el destino
+                const optionDestiny = document.createElement('option');
+                optionDestiny.value = country.ID;
+                optionDestiny.textContent = country.VALUE;
+                selectDestiny.appendChild(optionDestiny);
+            });
+        })
+        .catch(error => console.error('Error al cargar los países:', error));
+    
+    // Llenar selector rate class
+    fetch('http://localhost:3000/api/v1/getRateClass')
+        .then(response => response.json())
+        .then(data => {
+            const selectRate = document.getElementById('rateClass');
+            data.forEach(rateClass => {
+                // crear opcion para el origen
+                const optionRate = document.createElement('option');
+                optionRate.value = rateClass.VALUE;
+                optionRate.textContent = rateClass.VALUE;
+                selectRate.appendChild(optionRate);
+            });
+        })
+        .catch(error => console.error('Error al cargar los rate class:', error));
+    // Llenar selector prority
+    const selectPriority = document.getElementById('priority');
+    for(let i=1;i<6;i++) {
+        // crear opcion para el origen
+        const optionPriority = document.createElement('option');
+        optionPriority.value = i;
+        optionPriority.textContent = i
+        selectPriority.appendChild(optionPriority);
+    }
+
+    //
+    const inputs = document.querySelectorAll('input[type="number"][name="length[]"], input[type="number"][name="width[]"], input[type="number"][name="height[]"]');
+
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (event) => {
+            const char = String.fromCharCode(event.keyCode || event.which);
+            if (!/[\d.,]/.test(char)) {
+                event.preventDefault(); // Evita que se ingrese el carácter
+            }
+        });
+        input.addEventListener('blur', (event) => {
+            let value = parseFloat(event.target.value);
+            if (!isNaN(value)) {
+                event.target.value = value.toFixed(2); // Formatea a dos decimales
+            }
+        });
+    });
+
+});
+
+
+function validateSelection() {
+    if (originSelect.value === destinationSelect.value && originSelect.value !== "") {
+        alert('El país de origen y destino no pueden ser el mismo.');
+        destinationSelect.value = ""; // Resetea la selección del destino
+    }
+}
+
+const originSelect = document.getElementById('origin');
+const destinationSelect = document.getElementById('destination');
+originSelect.addEventListener('change', validateSelection);
+destinationSelect.addEventListener('change', validateSelection);
+
 function redirectToClient() {
     window.location.href = 'tracking.html';
 }

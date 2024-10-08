@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #0000 !important;
+        }
+        .header img {
+            width: 100px;
+            height: auto;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 18px;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .section p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #0056b3;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" style="background-color:#000000">
+            <div style="background-color:#000000">
+                <img src="{{headerImage}}" alt="Logo">
+            </div>
+        </div>
+        <div class="title">Booking Details</div>
+        <div class="section">
+            <p><strong>Airway Bill:</strong> {{airwaybill}}</p>
+            <p><strong>Origin:</strong> {{origin}}</p>
+            <p><strong>Destination:</strong> {{destination}}</p>
+            <p><strong>Date:</strong> {{date}} - {{hourSelect}}</p>
+            <p><strong>Shipper:</strong> {{shipper}}</p>
+            <p><strong>Consignee:</strong> {{consignee}}</p>
+            <p><strong>Agent:</strong> {{agent}}</p>
+        </div>
+        <div class="section">
+            <h2>Cargo Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pieces</th>
+                        <th>Packing</th>
+                        <th>Weight</th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Volume</th>
+                        <th>Reference</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each cargo}}
+                    <tr>
+                        <td>{{pieces}}</td>
+                        <td>{{packing}}</td>
+                        <td>{{weight}}</td>
+                        <td>{{length}}</td>
+                        <td>{{width}}</td>
+                        <td>{{height}}</td>
+                        <td>{{volume}}</td>
+                        <td>{{reference}}</td>
+                        <td>{{note}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <p>Total Pieces: {{totalPieces}}</p>
+            <p>Total Weight: {{totalWeight}}</p>
+            <p>Total Volume: {{totalVolume}}</p>
+        </div>
+    </div>
+</body>
+</html>

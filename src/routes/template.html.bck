@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            width: 100%;
+            background-color: #000000;
+            padding: 10px;
+            text-align: right;
+        }
+        .header img {
+            max-width: 100px; /* Ajusta según el tamaño necesario */
+            height: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div style="background-color:#000000;">
+            <img src="{{headerImage}}" alt="Logo">
+        </div>
+    </div>
+    <div class="content">
+        <h2>Booking Details</h2>
+        <p><strong>Airway Bill:</strong> {{airwaybill}}</p>
+        <p><strong>Origin:</strong> {{origin}}</p>
+        <p><strong>Destination:</strong> {{destination}}</p>
+        <p><strong>Date:</strong> {{date}} - {{hourSelect}}</p>
+        <p><strong>Shipper:</strong> {{shipper}}</p>
+        <p><strong>Consignee:</strong> {{consignee}}</p>
+        <p><strong>Agent:</strong> {{agent}}</p>
+
+        <h3>Cargo Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pieces</th>
+                    <th>Packing</th>
+                    <th>Weight</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Volume</th>
+                    <th>Reference</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each cargo}}
+                <tr>
+                    <td>{{pieces}}</td>
+                    <td>{{packing}}</td>
+                    <td>{{weight}}</td>
+                    <td>{{length}}</td>
+                    <td>{{width}}</td>
+                    <td>{{height}}</td>
+                    <td>{{volume}}</td>
+                    <td>{{reference}}</td>
+                    <td>{{note}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <h3>Totals</h3>
+        <p><strong>Total Pieces:</strong> {{totalPieces}}</p>
+        <p><strong>Total Weight:</strong> {{totalWeight}}</p>
+        <p><strong>Total Volume:</strong> {{totalVolume}}</p>
+    </div>
+    <div class="footer">
+        <p>Thank you for your business!</p>
+    </div>
+</body>
+</html>
+

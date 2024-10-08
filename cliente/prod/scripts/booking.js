@@ -1,3 +1,75 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Llenar selector origen y destino
+    fetch('https://heernandezdev.com/api/v1/getDestination')
+        .then(response => response.json())
+        .then(data => {
+            const selectOrigen = document.getElementById('origin');
+            const selectDestiny = document.getElementById('destination');
+            data.forEach(country => {
+                // crear opcion para el origen
+                const optionOrigen = document.createElement('option');
+                optionOrigen.value = country.ID;
+                optionOrigen.textContent = country.VALUE;
+                selectOrigen.appendChild(optionOrigen);
+                // crear opcion para el destino
+                const optionDestiny = document.createElement('option');
+                optionDestiny.value = country.ID;
+                optionDestiny.textContent = country.VALUE;
+                selectDestiny.appendChild(optionDestiny);
+            });
+        })
+        .catch(error => console.error('Error al cargar los países:', error));
+
+    // Llenar selector AM/PM
+    const selectHour = document.getElementById('hourSelect');
+
+    const optionAM = document.createElement('option');
+    optionAM.value = "AM";
+    optionAM.textContent = "AM";
+    selectHour.appendChild(optionAM);
+    // crear opcion para el origen
+    const optionPM = document.createElement('option');
+    optionPM.value = "PM";
+    optionPM.textContent = "PM";
+    selectHour.appendChild(optionPM);
+
+    // Obtener el nombre del agente
+    document.getElementById('agent').value = "John Doe";
+
+
+
+    //
+    const inputs = document.querySelectorAll('input[type="number"][name="length[]"], input[type="number"][name="width[]"], input[type="number"][name="height[]"]');
+
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (event) => {
+            const char = String.fromCharCode(event.keyCode || event.which);
+            if (!/[\d.,]/.test(char)) {
+                event.preventDefault(); // Evita que se ingrese el carácter
+            }
+        });
+        input.addEventListener('blur', (event) => {
+            let value = parseFloat(event.target.value);
+            if (!isNaN(value)) {
+                event.target.value = value.toFixed(2); // Formatea a dos decimales
+            }
+        });
+    });
+
+});
+
+function validateSelection() {
+    if (originSelect.value === destinationSelect.value && originSelect.value !== "") {
+        alert('El país de origen y destino no pueden ser el mismo.');
+        destinationSelect.value = ""; // Resetea la selección del destino
+    }
+}
+
+const originSelect = document.getElementById('origin');
+const destinationSelect = document.getElementById('destination');
+originSelect.addEventListener('change', validateSelection);
+destinationSelect.addEventListener('change', validateSelection);
+
 function redirectToClient() {
     window.location.href = 'tracking.html';
 }
@@ -64,7 +136,6 @@ function calculateTotals() {
     document.getElementById('totalWeight').value = totalWeight.toFixed(2);
     document.getElementById('totalVolume').value = totalVolume.toFixed(2);
 }
-
 document.getElementById('cargoTable').addEventListener('input', calculateTotals);
 
 function handleSubmit(event) {
@@ -140,12 +211,21 @@ function handleSubmit(event) {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(finalData)
-    }).then(response => response.json())
+    }).then(response => {
+        // Verifica si la respuesta es exitosa
+        if (!response.ok) {
+            // Lanza un error si la respuesta tiene un código de estado fuera del rango 200-299
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('Success:', data);
         alert('Booking submitted successfully!');
-    }).catch((error) => {
+        window.location.reload();
+    })
+    .catch((error) => {
         console.error('Error:', error);
-        alert('Error submitting booking.');
+        alert('Error submitting booking: ' + error.message);
     });
 }
