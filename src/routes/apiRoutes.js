@@ -433,7 +433,7 @@ router.post('/booking', async (req, res) => {
         // Generacion del XLS
         let fileBufferXLS = await generateExcel(value);
         let filenameXLS = 'booking.xlsx';
-        await sendEmail(process.env.EMAIL_CONTACT_CENTER,filenamePDF, fileBufferPDF,filenameXLS ,fileBufferXLS);
+        await sendEmailSMTP(process.env.EMAIL_CONTACT_CENTER,filenamePDF, fileBufferPDF,filenameXLS ,fileBufferXLS);
         res.status(200).json({ message: 'Booking received and file sent via email.' });
 
     } catch (err) {
